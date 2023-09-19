@@ -1,3 +1,5 @@
+/.vscode
+
 /sdk
 
 /server
@@ -7,5 +9,7 @@
 /influxdb/.env
 
 /mqtt/cert
-/mqtt/nohup.backup.out
+/mqtt/nohup_backup.out
 /mqtt/nohup.out
+
+.gitignore
