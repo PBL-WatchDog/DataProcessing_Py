@@ -13,3 +13,8 @@
 /mqtt/nohup.out
 
 .gitignore
+
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
