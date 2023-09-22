@@ -1,2 +1,3 @@
-# InfluxDB_Client
-influxDB와 연동해서 데이터를 가져오고 처리하는 로직들
+# Data_Processing
+### influxDB와 연동해서 데이터를 가져오고 처리하는 로직
+### R 언어를 통해 데이터를 분석하고 전처리
