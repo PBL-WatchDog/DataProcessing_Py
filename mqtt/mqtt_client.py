@@ -1,9 +1,7 @@
 import paho.mqtt.client as mqtt
 import ssl, json, random
-
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
-
 
 #  (mqtt_client.connect가 잘 되면) 서버 연결이 잘되면 on_connect 실행 (이벤트가 발생하면 호출)
 def on_connect(client, userdata, flags, rc):
@@ -73,10 +71,15 @@ def write_sensor_data_tsdb(gateway_model, sensor_data):
 
 #####################################################
 
-token = "blQNLEOIYKlbJ73tWhurIedUOGQSxtfR0eHPGjPlF0LPWxi92dFuCcWwv1K0JoXjHdHiRCqiSHZfihv-PPJfWw=="
+token = "1cDBU-BVSjJ0emb2KmZjgOhGNs3V1-cW60aqfMHoaeyndLVVdFfIo_Gp81OZn1iZ6gCHUvTjoi2rheflojizOg=="
 org = "Brighten"
 url = "http://localhost:8086"
-bucket="Sensor_test"
+bucket="smarthome"
+# new influxDB connection
+# token = "1cDBU-BVSjJ0emb2KmZjgOhGNs3V1-cW60aqfMHoaeyndLVVdFfIo_Gp81OZn1iZ6gCHUvTjoi2rheflojizOg=="
+# org = "Brighten"
+# url = "http://localhost:8086"
+# bucket="Sensor"
 
 write_client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 write_api = write_client.write_api(write_options=SYNCHRONOUS)
@@ -97,7 +100,7 @@ password = "smarthome1357!@"
 sensor_topic = "tele/+/SENSOR"
 state_topic = "tele/+/STATE"
 
-mqtt_client.tls_set("./cert/ca.crt", tls_version=ssl.PROTOCOL_TLSv1_2)
+mqtt_client.tls_set("/home/smarthome/cert/ca.crt", tls_version=ssl.PROTOCOL_TLSv1_2)
 mqtt_client.tls_insecure_set(True)
 
 mqtt_client.username_pw_set(username, password)
@@ -108,3 +111,4 @@ print(con_res)
 mqtt_client.subscribe(sensor_topic, 0)
 mqtt_client.subscribe(state_topic, 0)
 mqtt_client.loop_forever()
+
