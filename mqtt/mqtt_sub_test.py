@@ -1,6 +1,6 @@
 import ssl, json, random
 from paho.mqtt import client as mqtt
-import pymysql
+# import pymysql
 from datetime import datetime
 
 # DB Test
@@ -123,7 +123,7 @@ mqtt_client.subscribe(state_topic, 0)
 mqtt_client.subscribe(result_topic, 0)
 mqtt_client.loop_forever()
 
-conn.close()
+#conn.close()
 
 
 # 처음 subscriber 실행한 후
