@@ -62,7 +62,7 @@ def write_sensor_data_tsdb(gateway_model, sensor_data):
     point = influxdb_client.Point("SensorData").tag("mac_address" , gateway_model).tag("Device", sensor_value['Device'])
     for key in sensor_value:
         if key not in dump_property:
-            if type(sensor_value[key]) == type(str()):
+            if type(sensor_value[key]) in [type(str()), type(int()), type(float())]:
                 point.field(key, str(sensor_value[key]))
             
     write_api.write(bucket=bucket, org=org, record=point)
