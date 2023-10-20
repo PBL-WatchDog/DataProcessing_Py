@@ -39,7 +39,7 @@ def on_message(client, userdata, msg):
             if sensor_value.__contains__('ModelId'):    # ModelId -> 디바이스가 게이트웨이로 등록된 상황
                 # mysql table 등록 대기 디바이스 저장
                 print(f'------{gateway_model} Gateway -> {sensor_value["Device"]} Device 대기 등록------')
-                register_device(sensor_value['Device'], gateway_model)
+                register_device(sensor_value['Device'], gateway_model, get_device_type_by_ModelId(sensor_value["ModelId"]))
                 
             write_sensor_data_tsdb(gateway_model, sensor_value)
         else:
@@ -82,18 +82,33 @@ def write_sensor_data_tsdb(gateway_model, sensor_value):
     write_api.write(bucket=bucket, org=org, record=point)
     # print(gateway_model + " sensor data TSDB에 저장")
 
-def register_device(device_id, gateway_id, dictionary=False):
+def register_device(device_id, gateway_id, modelId, dictionary=False):
     conn = conn_pool.get_connection()
     cursor = conn.cursor(dictionary=dictionary)
 
-    sql = "insert into PendingDevice(device_id, gateway_id) Values(%s, %s)"
-    params = (device_id, gateway_id)
+    sql = "insert into PendingDevice(device_id, gateway_id, device_type) Values(%s, %s, %s)"
+    params = (device_id, gateway_id, modelId)
     cursor.execute(sql, params)
    
     conn.commit()  # 쿼리를 커밋합니다.
     cursor.close()
     conn.close()
 
+# modelId를 통해 디바이스 종류 찾기
+def get_device_type_by_ModelId(ModelID):
+    device_type_dic = {
+        "RH3001": "door",
+        "lumi.magnet.agl02": "door",
+        "multi": "door",
+        "TS004F" : "swtich",
+        "RH3040": "motion",
+        "TS0202": "motion",
+        "lumi.motion.agl02": "motion",
+        "TS0207": "leak",
+        "TS0601": "smoke",
+        "lumi.plug.maeu01": "plug",     
+    }#"illumination": "lumi.motion.agl02"
+    return device_type_dic[ModelID]
 
 ##################new influxDB connection##################
 
