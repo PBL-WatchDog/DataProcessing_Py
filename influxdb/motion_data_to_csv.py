@@ -17,13 +17,13 @@ device_type = "door"
 
 query = f"""
             from(bucket: "smarthome")
-                |> range(start: 0)
+                |> range(start: 2023-10-10)
                 |> filter(fn: (r) => r["_measurement"] == "SensorData")
                 |> filter(fn: (r) => r["mac_address"] == "W220_D6FC80")
                 |> filter(fn: (r) => r["Device"] == "0x5722" or r["Device"] == "0x838A" or r["Device"] == "0xC5FF")
                 |> filter(fn: (r) => r["_field"] == "Contact")
-                |> aggregateWindow(every: 30m, fn: count, createEmpty: false)
-
+                |> aggregateWindow(every: 30m, fn: count, createEmpty: true)
+                |> fill(column: "_value", value: 0)
             """
 
 result = query_api.query(query, org=org)
