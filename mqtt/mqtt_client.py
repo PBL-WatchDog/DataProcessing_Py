@@ -106,9 +106,11 @@ def get_device_type_by_ModelId(ModelID):
         "lumi.motion.agl02": "motion",
         "TS0207": "leak",
         "TS0601": "smoke",
-        "lumi.plug.maeu01": "plug",     
+        "lumi.plug.maeu01": "plug", 
+        "SG-V100-ZB": "gas_breaker",
+        "SM0212": "gas"
     }#"illumination": "lumi.motion.agl02"
-    return device_type_dic[ModelID]
+    return device_type_dic.get(ModelID, "undefined")
 
 ##################new influxDB connection##################
 
