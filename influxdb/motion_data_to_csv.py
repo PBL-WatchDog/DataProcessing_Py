@@ -15,13 +15,13 @@ query_api = client.query_api()
 device_type = "motion"
 # df = pd.DataFrame(columns=["date", "mac_address", f"{device_type}1", f"{device_type}2", f"{device_type}3"])
 
-query = """
-            from(bucket: "smarthome")
-                |> range(start: 2023-10-10)
+query = f"""
+            from(bucket: "{bucket}")
+                |> range(start: 2023-08-18)
                 |> filter(fn: (r) => r["_measurement"] == "SensorData")
                 |> filter(fn: (r) => r["mac_address"] == "W220_D6FC80")
                 |> filter(fn: (r) => r["Device"] == "0xF26E" or r["Device"] == "0x4989")
-                |> filter(fn: (r) => r["_field"] == "Occupancy")
+                |> filter(fn: (r) => r["_field"] == "0500?00")
                 |> aggregateWindow(every: 30m, fn: count, createEmpty: true)
                 |> fill(column: "_value", value: 0)
         """

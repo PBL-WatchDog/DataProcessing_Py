@@ -16,8 +16,8 @@ device_type = "door"
 # df = pd.DataFrame(columns=["date", "mac_address", f"{device_type}1", f"{device_type}2", f"{device_type}3"])
 
 query = f"""
-            from(bucket: "smarthome")
-                |> range(start: 2023-10-10)
+            from(bucket: "{bucket}")
+                |> range(start: 2023-08-18)
                 |> filter(fn: (r) => r["_measurement"] == "SensorData")
                 |> filter(fn: (r) => r["mac_address"] == "W220_D6FC80")
                 |> filter(fn: (r) => r["Device"] == "0x5722" or r["Device"] == "0x838A" or r["Device"] == "0xC5FF")

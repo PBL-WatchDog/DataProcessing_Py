@@ -6,8 +6,6 @@ org = "Brighten"
 url = "http://211.57.200.6:8086"
 bucket = "smarthome"
 
-
-
 client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 query_api = client.query_api()
 
@@ -23,8 +21,7 @@ for mac_address in ["W220_8929E8", "W220_D6FC80", "W220_818FB4", "W220_BADBD8"]:
                     |> filter(fn: (r) => r[\"mac_address\"] == "{mac_address}")
                     |> window(every: 30m)
                     |> mean()
-
-                """
+            """
 
     result = query_api.query(query, org=org)
 

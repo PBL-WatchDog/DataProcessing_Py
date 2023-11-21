@@ -17,7 +17,7 @@ device_type = "plug"
 
 query = """
             from(bucket: "smarthome")
-                |> range(start: 2023-10-10)
+                |> range(start: 2023-08-18)
                 |> filter(fn: (r) => r["_measurement"] == "SensorData")
                 |> filter(fn: (r) => r["mac_address"] == "W220_D6FC80")
                 |> filter(fn: (r) => r["Device"] == "0xCC80")
