@@ -12,29 +12,28 @@ query_api = client.query_api()
 
 
 # dataframe 생성
-device_type = "door"
+device_type = "motion"
 # df = pd.DataFrame(columns=["date", "mac_address", f"{device_type}1", f"{device_type}2", f"{device_type}3"])
 
-query = f"""
+query = """
             from(bucket: "smarthome")
                 |> range(start: 2023-10-10)
                 |> filter(fn: (r) => r["_measurement"] == "SensorData")
                 |> filter(fn: (r) => r["mac_address"] == "W220_D6FC80")
-                |> filter(fn: (r) => r["Device"] == "0x5722" or r["Device"] == "0x838A" or r["Device"] == "0xC5FF")
-                |> filter(fn: (r) => r["_field"] == "Contact")
+                |> filter(fn: (r) => r["Device"] == "0xF26E" or r["Device"] == "0x4989")
+                |> filter(fn: (r) => r["_field"] == "Occupancy")
                 |> aggregateWindow(every: 30m, fn: count, createEmpty: true)
                 |> fill(column: "_value", value: 0)
-            """
+        """
 
 result = query_api.query(query, org=org)
 
 data = []
 data_dict = {}
 
-door_col = {
-    "0x5722": "door1",
-    "0x838A": "door2",
-    "0xC5FF": "door3"
+device_col = {
+    "0xF26E": device_type + "1",
+    "0x4989": device_type + "2"
 }
 
 for table in result:
@@ -46,7 +45,7 @@ for table in result:
         if not (date.strftime("%Y-%m-%d %H:%M:%S") + "~" + mac_address) in data_dict:
             data_dict[date.strftime("%Y-%m-%d %H:%M:%S") + "~" + mac_address] = {}
         
-        data_dict[date.strftime("%Y-%m-%d %H:%M:%S") + "~" + mac_address][door_col[device]] = value
+        data_dict[date.strftime("%Y-%m-%d %H:%M:%S") + "~" + mac_address][device_col[device]] = value
         # data.append({"date": date, "mac_address": mac_address, field: value})
 # 데이터프레임 생성
 for key, value in data_dict.items():
@@ -57,9 +56,8 @@ for key, value in data_dict.items():
     obj['date'] = date;
     obj['mac_address'] = mac_address
 
-    obj[f"{device_type}1"] =  value.get(f"{device_type}1", 0)
-    obj[f"{device_type}2"] =  value.get(f"{device_type}2", 0)
-    obj[f"{device_type}3"] =  value.get(f"{device_type}3", 0)
+    for device_id, col_name in device_col.items():
+        obj[col_name] = value.get(col_name, 0) 
 
     data.append(obj)
 
