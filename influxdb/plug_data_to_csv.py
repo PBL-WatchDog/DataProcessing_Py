@@ -13,16 +13,16 @@ query_api = client.query_api()
 
 # dataframe 생성
 device_type = "plug"
-# df = pd.DataFrame(columns=["date", "mac_address", f"{device_type}1", f"{device_type}2", f"{device_type}3"])
+sub_string= '{ r with _value: if r._value == "" then 0.0 else float(v: r._value) }'
 
-query = """
-            from(bucket: "smarthome")
+query = f"""
+            from(bucket: "{bucket}")
                 |> range(start: 2023-08-18)
                 |> filter(fn: (r) => r["_measurement"] == "SensorData")
                 |> filter(fn: (r) => r["mac_address"] == "W220_D6FC80")
                 |> filter(fn: (r) => r["Device"] == "0xCC80")
                 |> filter(fn: (r) => r["_field"] == "ActivePower")
-                |> map(fn: (r) => ({ r with _value: if r._value == "" then 0.0 else float(v: r._value) }))
+                |> map(fn: (r) => ({sub_string}))
                 |> aggregateWindow(every: 30m, fn: sum, createEmpty: true)
                 |> fill(column: "_value", value: 0.0)
         """

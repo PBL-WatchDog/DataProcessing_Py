@@ -21,7 +21,7 @@ query = f"""
                 |> filter(fn: (r) => r["_measurement"] == "SensorData")
                 |> filter(fn: (r) => r["mac_address"] == "W220_D6FC80")
                 |> filter(fn: (r) => r["Device"] == "0x5722" or r["Device"] == "0x838A" or r["Device"] == "0xC5FF")
-                |> filter(fn: (r) => r["_field"] == "Contact")
+                |> filter(fn: (r) => r["_field"] == "0500?00")
                 |> aggregateWindow(every: 30m, fn: count, createEmpty: true)
                 |> fill(column: "_value", value: 0)
          """
