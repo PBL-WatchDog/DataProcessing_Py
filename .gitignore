@@ -2,11 +2,12 @@
 
 /sdk
 
-/server
+/R_lang
 
 /influxdb/.vscode
 /influxdb/data
 /influxdb/.env
+/influxdb/test.py
 
 /mqtt/cert
 /mqtt/nohup_backup.out
